@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section css{
+    <link href="~/css/Pages/Unauthorised.css" rel="stylesheet" />
+
+}
+
+
+<div class="content-body">
+    <section class="flexbox-container">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+            <div class="col-lg-8 col-md-12 p-0">
+                <div class="card-header bg-transparent border-0">
+                    <h2 style="color:red" class="text-bold-500 text-center">Yêu cầu trái phép</h2>
+                    <div class="panel-body text-center">
+                        <ul style="font-size:17px">
+                            <li>Bạn <b>không có quyền</b> truy cập tài nguyên được yêu cầu do hạn chế về bảo mật.</li>
+                            <li>Để được truy cập, vui lòng liên hệ với quản trị viên hệ thống của bạn.<b><a href="/Home" style="color: red;"> Quay về trang chủ</a></b><br /></li>
+                        </ul>
+                    </div>
+                </div>
+                @*<div class="card-content">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 mb-1 ">
+                                <a href="/Home" class="btn btn-primary btn-block text-center"><i class="feather icon-home"></i> Home</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="row">
+                            <p class="text-muted text-center col-12 py-1">© <span class="year"></span> <a href="/Home">Mobifiber </a>Crafted with by <a href="http://solutions.phucthanhgroup.vn/" target="_blank">PhucThanh Solutions</a></p>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </section>
+</div>

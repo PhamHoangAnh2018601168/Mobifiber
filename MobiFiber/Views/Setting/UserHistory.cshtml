@@ -1,0 +1,79 @@
+﻿@using MobiFiber.Models;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Lịch sử hoạt động của tài khoản";
+    List<Account> lstAccount = ViewData["lstAccount"] as List<Account>;
+}
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/UserManager.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <link href="~/css/Pages/Report.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Lịch sử tài khoản</h4>
+    </div>
+    <div class="card-body">
+        <div class="btnCssform col-md-12 d-flex pl-0">
+            <div class="col-md-2 pl-0">
+                <select name="SelectUserName" id="SelectUserName" class="form-control">
+                    <option value="">Tài khoản</option>
+                    @if (lstAccount != null && lstAccount.Count > 0)
+                    {
+                        foreach (var item in lstAccount)
+                        {
+                            <option value="@item.Id">@item.UserName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-5 d-flex">
+                <div class="col-md-6">
+                    <div class="input-group date">
+                        <input name="FromDateHis" value="" id="FromDateHis" class="form-control" placeholder="From">
+                        <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group date">
+                        <input name="ToDateHis" value="" id="ToDateHis" class="form-control" placeholder="To">
+                        <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <select name="SelectModule" id="SelectModule" class="form-control">
+                    <option value="-1">Mô-đun</option>
+                    <option value="2">Thiết bị</option>
+                    <option value="3">Gói cước</option>
+                    <option value="4">Khách hàng</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="SelectAction" id="SelectAction" class="form-control">
+                    <option value="-1">Hành động</option>
+                    <option value="1">Thêm mới</option>
+                    <option value="2">Sửa</option>
+                    <option value="4">Xoá</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary pl-1" id="btnSearchUserHis" title="Lọc"> <i class="fa fa-filter"></i></button>
+            </div>
+        </div>
+        <div>
+            <table id="tblUserHistory" class="table-hover table-striped"></table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/UserManager.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

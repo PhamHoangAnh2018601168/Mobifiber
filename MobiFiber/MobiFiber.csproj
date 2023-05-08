@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>4553655b-687e-4a6c-afb2-439df64f1706</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="app.config" />
+    <Content Remove="log4net.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="TemplateExcel\Danh_Sach_Goi_Cuoc.xlsx" />
+    <None Remove="TemplateExcel\Danh_Sach_Khach_Hang.xlsx" />
+    <None Remove="TemplateExcel\Danh_Sach_Thiet_Bi.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TemplateExcel\Danh_Sach_Goi_Cuoc.xlsx">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="TemplateExcel\Danh_Sach_Khach_Hang.xlsx">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="TemplateExcel\Danh_Sach_Thiet_Bi.xlsx">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="log4net.config" />
+    <None Include="app.config" />
+    <None Include="wwwroot\app-assets\js\HightChart\customEvents-v-3-0-9.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\exporting.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\gantt.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\highcharts-3d.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\highcharts-gantt.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\highcharts-v8-2-2.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\highcharts.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\highcharts.old.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\networkgraph-v-8-2-2.js" />
+    <None Include="wwwroot\app-assets\js\HightChart\variable-pie.js" />
+    <None Include="wwwroot\lib\select2\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\lib\select2\.github\ISSUE_TEMPLATE.md" />
+    <None Include="wwwroot\lib\select2\.github\PULL_REQUEST_TEMPLATE.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.3" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Fake.Core.Process" Version="5.20.3" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.153.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="PagedList" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\ckfinder\bin\Debug\" />
+    <Folder Include="wwwroot\lib\ckfinder\bin\Release\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\fileeditor\bin\Debug\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\fileeditor\bin\Release\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\imageresize\bin\Debug\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\imageresize\bin\Release\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\watermark\bin\Debug\" />
+    <Folder Include="wwwroot\lib\ckfinder\plugins\watermark\bin\Release\" />
+    <Folder Include="wwwroot\Output\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,63 @@
+﻿body {
+}
+
+
+#FormDevice, #FormDeviceUpdate, #FormDeviceDetail {
+    max-width: 65%;
+}
+/*
+#editstatusdevice, #ReinputWarehouse {
+    display: none;
+}*/
+
+.btnCssDevice {
+    position: absolute;
+    right: 420px;
+}
+
+.btnCssDeviceselect {
+    position: absolute;
+    right: 210px;
+}
+
+#tabsDevice {
+    background: #f3f5f8;
+}
+
+.float-right.search {
+    margin-top: 0px !important;
+}
+
+.btnCssDeviceselect > .select2 {
+    width: 202px !important;
+}
+/*.cssDeviceName > .th-inner {
+    width: 200px !important;
+    overflow-wrap: break-word;
+}*/
+/*.cssallocationTime > .th-inner {
+    width: 100px !important;
+    overflow-wrap: break-word;
+}*/
+@media screen and (max-width: 425px) {
+    .btnCssDevice, .btnCssDeviceselect {
+        position: relative;
+        top: auto;
+        right: auto;
+    }
+
+        .btnCssDeviceselect > .select2 {
+            width: 100% !important;
+        }
+
+    .float-right.search {
+        width: 100% !important;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    #FormDevice, #FormDeviceUpdate, #FormDeviceDetail {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,27 @@
+﻿body {
+}
+#FormUserManager {
+    max-width: 70%;
+}
+#showpassword{
+position: absolute;
+right: 25px;
+top: 52px;
+}
+#btnOpenModalUser {
+    margin-left: 2px;
+    position: absolute
+}
+
+.search {
+    margin-top: 0px !important;
+}
+
+.modal-dialog-scrollable .modal-body {
+    overflow: visible;
+}
+@media screen and (max-width: 768px) {
+    #FormUserManager {
+        max-width: 100%;
+    }
+}

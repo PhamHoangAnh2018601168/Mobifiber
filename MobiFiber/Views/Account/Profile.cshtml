@@ -1,0 +1,146 @@
+﻿@using MobiFiber.Models;
+@model MobiFiber.Models.Account;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Thông tin tài khoản";
+    RoleGroup roleGroup = new RoleGroup();
+    if (ViewData["roleGroup"] != null)
+    {
+        roleGroup = (RoleGroup)ViewData["roleGroup"];
+    }
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-table/css/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card w-100">
+            <div class="card-header">
+                <i class="fa fa-info" style="margin-right:5px"></i>Thông tin cá nhân
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form-horizontal form-simple", role = "form", id = "frm" }))
+                {
+                    <div class="text-danger font-weight-500">
+                        @ViewData["MessageProfile"]
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="FirstName" class="col-form-label">Tên:</label>
+                                    <input type="text" name="firstname" id="firstname" value="@Model.FirstName" placeholder="" class="form-control round" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="LastName" class="col-form-label">Họ và tên đệm:</label>
+                                    <input type="text" name="lastname" id="lastname" value="@Model.LastName" placeholder="" class="form-control round" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="Role" class="col-form-label">Vai trò:</label>
+                                    <input type="text" name="role" id="role" value="@roleGroup.Name" placeholder="" class="form-control round" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="email" class="col-form-label">Email:</label>
+                                    <input type="text" name="email" id="email" value="@Model.Email" placeholder="" class="form-control round" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="phone" class="col-form-label">Số điện thoại:</label>
+                                    <input type="tel" name="phone" id="phone" value="@Model.Phone" placeholder="" class="form-control round" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="birthday" class="col-form-label">Ngày sinh:</label>
+                                    <input type="text" name="birthday" id="birthday" value="@Model.Birthday" placeholder="" class="form-control round" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="row align-content-center justify-content-center">
+                        <button class="btn btn-primary">Lưu hồ sơ</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card w-100">
+            <div class="card-header">
+                <i class="fa fa-key" style="margin-right:5px"></i>Đổi mật khẩu
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("ChangePass", "Account", FormMethod.Post, new { @class = "form-horizontal form-simple", role = "form", id = "frm" }))
+                {
+                    <div class="text-danger font-weight-500">
+                        @ViewData["Message"]
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label for="oldpassword" class="col-form-label">Mật khẩu cũ:</label>
+                                <input type="password" name="oldpassword" id="oldpassword" value="" placeholder="" class="form-control round" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label for="NewPassword" class="col-form-label">Mật khẩu mới:</label>
+                                <input type="password" name="NewPassword" id="NewPassword" value="" placeholder="" class="form-control round" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label for="ConfirmPassword" class="col-form-label">Nhập lại mật khẩu mới:</label>
+                                <input type="password" name="ConfirmPassword" id="ConfirmPassword" value="" placeholder="" class="form-control round" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-content-center justify-content-center">
+                        <input type="submit" class="btn btn-primary" name="name" value="Đổi mật khẩu" />
+                    </div>
+                    <input type="hidden" name="UserName" value="@Model.UserName" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/lib/bootstrap-table/js/bootstrap-table.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="/lib/moment/moment.min.js"></script>
+    <script src="~/js/Profile.js"></script>
+}

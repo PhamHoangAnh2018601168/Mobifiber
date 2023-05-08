@@ -1,0 +1,212 @@
+﻿@using MobiFiber.Models;
+@model MobiFiber.Models.Account;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý tài khoản";
+    List<RoleGroup> roleGroup = new List<RoleGroup>();
+    if (ViewData["roleGroup"] != null)
+    {
+        roleGroup = (List<RoleGroup>)ViewData["roleGroup"];
+    }
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/UserManager.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Quản lý tài khoản</h4>
+    </div>
+    <div class="card-body">
+        <div class="btnCssUserManager">
+            <button class="btn btn-primary" id="btnOpenModalUser"><i class="fa fa-plus"></i> Tạo mới</button>
+        </div>
+        <div>
+            <table id="tblUserManager" class="table-hover table-striped"></table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ChangePassword" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đổi mật khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AdminChangePass", "Setting", FormMethod.Post, new { @class = "form-horizontal form-simple", role = "form", id = "frm" }))
+                {
+                    <input type="hidden" name="Id" id="IdResetPassword" value="" />
+                    <input type="hidden" name="UserName" id="UserNameResetPassword" value="" />
+                    <div class="text-danger font-weight-500" id="Message">
+
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="NewPassword" class="col-form-label">Mật khẩu mới:</label>
+                                    <input type="password" name="NewPassword" id="NewPassword" value="" placeholder="" class="form-control round">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label for="ConfirmPassword" class="col-form-label">Nhập lại mật khẩu mới:</label>
+                                    <input type="password" name="ConfirmPassword" id="ConfirmPassword" value="" placeholder="" class="form-control round">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <input type="button" id="btnresetpassword" class="btn btn-primary mr-3" name="name" value="Đổi mật khẩu">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EditUser" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xs" id="FormUserManager" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa thông tin tài khoản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("EditRole", "Account", FormMethod.Post, new { @class = "form-horizontal form-simple", role = "form", id = "frm" }))
+                {
+                    <input id="Id" name="Id" type="hidden" />
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Tên tài khoản đăng nhập<span style="color:red"></span>: </label>
+                            <input type="text" class="form-control" id="EditUserName" name="UserName" maxlength="500" readonly disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Email người dùng<span style="color:red"></span>: </label>
+                            <input type="email" class="form-control" id="EditEmail" name="Email" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Tên người dùng :</label>
+                            <input type="text" class="form-control" id="EditFirstName" name="FirstName" maxlength="255" >
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Họ và tên đệm : </label>
+                            <input type="text" class="form-control" id="EditLastName" name="LastName" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Quyền cho tài khoản<span style="color:red"> (*) </span>: </label>
+                            <select name="Role" id="Role" class="form-control">
+                                <option value="0">--- Chọn quyền ---</option>
+                                @foreach (RoleGroup item in roleGroup)
+                                {
+                                    <option value="@item.Id"> @item.Name </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-inline-flex">
+                            <div class="col-md-offset-2 mr-1 mt-3">
+                                <input type="submit" name="btnEdit" value="Lưu" id="btnEdit" class="btn btn-primary">
+                            </div>
+                            <div class="col-md-offset-2 mt-3">
+                                <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseUser" value="Đóng" id="btnCloseUser" class="btn btn-danger">
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CreateUser" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormUserManager" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo mới tài khoản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">
+                    Vui lòng nhập các trường bắt buộc (*)
+                </h5>
+                <input id="Id" value="0" hidden />
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên tài khoản đăng nhập<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="UserName" name="UserName" maxlength="500">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Mật khẩu<span style="color:red"> (*) </span>: </label>
+                        <input type="password" class="form-control" id="Password" name="Password" maxlength="500"><i id="showpassword" class="fa fa-eye"></i>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Email người dùng<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="Email" name="Email" maxlength="500">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Quyền cho tài khoản<span style="color:red"> (*) </span>: </label>
+                        <select name="RoleCreate" id="RoleCreate" class="form-control">
+                            <option value="0">--- Chọn quyền ---</option>
+                            @foreach (RoleGroup item in roleGroup)
+                            {
+                                <option value="@item.Id"> @item.Name </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 d-flex mt-2">
+                    <div class="col-md-offset-2 mr-1">
+                        <input type="submit" name="btnAddUser" value="Tạo mới" id="btnAddUser" class="btn btn-primary">
+                    </div>
+                    <div class="col-md-offset-2">
+                        <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseUser" value="Đóng" id="btnCloseUser" class="btn btn-danger">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="HistoryUser" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Lịch sử tài khoản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tblHisUser" class="table-hover table-striped"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/UserManager.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

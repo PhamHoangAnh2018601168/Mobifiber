@@ -1,0 +1,341 @@
+﻿@using Micro.Web
+@{
+
+    Dictionary<int, bool> dicRole = GetUserRole.GetRoleAddByUser();
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý thiết bị";
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/Device.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Quản lý thiết bị</h4>
+    </div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <input class="form-control" id="txtsearch" placeholder="Tìm kiếm"/>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="filterdevicestatus">
+                    <option value="-1"> Tất cả thiết bị </option>
+                    <option value="1"> Thiết bị thực hiện hợp đồng </option>
+                    <option value="0"> Thiết bị trong kho </option>
+                    <option value="5"> Thiết bị thu hồi </option>
+                    <option value="3"> Thiết bị đã bán </option>
+                    <option value="4"> Thiết bị dừng phân bổ </option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" id="btnsearch"><i class="fa fa-search"></i> Tìm kiếm</button>
+                <button class="btn btn-primary" id="btnOpenModalDevice" style="margin-left:2px" data-toggle="modal" data-target="#CreateDevice" @(dicRole[(int)MobiFiber.Code.ActionModule.DeviceManager] == true ? "" : "disabled")><i class="fa fa-plus"></i> Tạo mới</button>
+            </div>
+        </div>
+        <div>
+            <table id="tblDevice" class="table-hover table-striped"></table>
+        </div>
+    </div>
+</div>
+@*<div class="loader-wrapper">
+        <div class="loader">
+        </div>
+    </div>*@
+
+<div class="" id="loadingpage"></div>
+
+<div class="modal fade" id="CreateDevice" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormDevice" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo mới thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="Deviceid" value="0" hidden />
+            </div>
+            <div>
+                <ul class="nav nav-tabs" id="tabsDevice" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="btn-step1" data-toggle="tab" aria-controls="step_1" href="#step_1" role="tab" aria-selected="false">
+                            Thêm mới
+                            <span class="badge badge-success badge-pill badge-round float-right"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="btn-step2" data-toggle="tab" aria-controls="step_2" href="#step_2" role="tab" aria-selected="false">
+                            Thêm mới bằng File
+                            <span class="badge badge-warning badge-pill badge-round totalComment float-right"></span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="step_1" role="tabpanel" aria-labelledby="step_1">
+                        <div class="modal-body">
+                            <h5 class="text-danger">
+                                Vui lòng nhập các trường bắt buộc (*)
+                            </h5>
+                            <div class="input-group">
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Tên thiết bị<span style="color:red"> (*) </span>: </label>
+                                    <input type="text" class="form-control" id="AddDeviceName" name="Title" maxlength="250">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Mã thiết bị <span style="color:red"> (*) </span>: </label>
+                                    <input type="text" class="form-control" id="DeviceCode" name="DeviceCode" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Serial thiết bị <span style="color:red"> (*) </span>: </label>
+                                    <input type="text" class="form-control" id="SerialDevice" name="SerialDevice" maxlength="100">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Giá thiết bị<span style="color:red"> ( Chưa bao gồm VAT *) </span>: </label>
+                                    <input class="form-control" id="DevicePrice" name="DevicePrice" maxlength="16" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onblur="common.RemoveSpecialChar(this)">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Thời gian phân bổ (tháng)<span style="color:red"> (*) </span>: </label>
+                                    <input class="form-control" id="AllocationTime" name="AllocationTime" maxlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onblur="common.RemoveSpecialChar(this)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Ngày nhập kho <span style="color:red"> (*) </span>: </label>
+                                    <div class="form-group mb-0">
+                                        <div class="input-group date DateInput">
+                                            <input name="DateInputWarehouse" value="" id="DateInputWarehouse" class="form-control">
+                                            <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group" id="editstatusdevice">
+                                <div class="col-md-6">
+                                    <label for="recipient-name" class="col-form-label">Trạng thái thiết bị<span style="color:red"> (*) </span>: </label>
+                                    <select name="EditDeviceStatus" id="EditDeviceStatus" class="form-control">
+                                        <option value="-1">---Chọn trạng thái---</option>
+                                        <option value="0">Trong kho</option>
+                                        <option value="1">Thực hiện hợp đồng</option>
+                                        <option value="3">Đã bán</option>
+                                        <option value="4">Dừng phân bổ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6" id="cssStopAllocation">
+                                    <label for="recipient-name" class="col-form-label">Ngày dừng phân bổ <span style="color:red"> (*) </span>: </label>
+                                    <div class="form-group mb-0">
+                                        <div class="input-group date StopAllocation">
+                                            <input name="stopallocation" value="" id="stopallocation" class="form-control">
+                                            <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12 d-flex mt-2">
+                                <div class="col-md-offset-2 mr-1">
+                                    <button name="btnAddDevice" id="btnAddDevice" class="btn btn-primary">Tạo</button>
+                                </div>
+                                <div class="col-md-offset-2">
+                                    <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseDevice" value="Đóng" id="btnCloseDevice" class="btn btn-danger">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="step_2" role="tabpanel" aria-labelledby="step_2">
+
+                        <div class="modal-body">
+                            <div id="divUpload">
+                                <div class="mb-1 d-flex">
+                                    <div class="col-md-10">
+                                        <input type="file" id="fileupload" name="files" class="form-control mb-1" />
+                                        <span class="text-danger"> ( Vui lòng không sửa dụng công thức trong file Exel )</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="button" onclick="window.location.href='/Device/DownloadTemplateDevice'" name="DownloadTemplate" value="Tải file mẫu" id="btnDownloadTemplate" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button name="Upload" id="btnupload" class="btn btn-primary">Tải lên</button>
+                                    <input type="button" data-dismiss="modal" aria-label="Close" value="Đóng" class="btn btn-danger">
+                                </div>
+                            </div>
+                            <div id="divPreview" style="display:none">
+                                <div class="tabstablecss">
+                                    <table id="tblDeviceValid" class="table-hover table-striped"></table>
+                                </div>
+                                <button name="SaveData" id="btnSaveData" class="btn btn-primary my-1">Lưu</button>
+                                <div class="tabstablecss">
+                                    <table id="tblDeviceInValid" class="table-hover table-striped"></table>
+                                </div>
+                                <input type="button" name="DownloadError" value="Download Error" id="btnDownloadError" class="btn btn-primary my-1" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ViewDetailDevice" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormDeviceDetail" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Lịch sử thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Tên thiết bị : </b></label>
+                            <span id="NamDeviceHistory"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Mã thiết bị : </b></label>
+                            <span id="DeviceNumberHistory"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Serial thiết bị : </b></label>
+                            <span id="SerialDeviceHistory"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Ngày nhập kho : </b></label>
+                            <span id="DateWareHouseHistory"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Thời gian phân bổ thiết bị : </b></label>
+                            <span id="DeviceAllocationHistory"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="col-form-label"><b>Lịch sử thiết bị : </b></label>
+                            <table id="tblDeviceDetail" class="table-hover mb0 table-borderless"></table>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 d-flex mt-2">
+                        <div class="col-md-offset-2">
+                            <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseViewDetail" value="Đóng" id="btnCloseViewDetail" class="btn btn-danger">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UpdateDevice" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormDeviceUpdate" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thu hồi thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="ContractIdWithDraw" value="0" hidden />
+                <input id="DeviceIdWithDraw" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Tên khách hàng : &nbsp;</b></label>
+                            <span id="CustomerNameDeviceUpdate"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Mã khách hàng : &nbsp;</b></label>
+                            <span id="CustomerNumberDeviceUpdate"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Số hợp đồng : &nbsp;</b></label>
+                            <span id="ContractNumberDeviceUpdate"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Ngày cho mượn thiết bị : &nbsp;</b></label>
+                            <span id="SignDateDeviceUpdate"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Thu hồi thiết bị/bảo hành<span style="color:red"> (*) </span>:  </b></label>
+                            <select name="SelectWithdraw" id="SelectWithdraw" class="form-control">
+                                <option value="0">--- Chọn thu hồi hoặc bảo hành ---</option>
+                                <option value="1">Thu hồi thiết bị</option>
+                                <option value="2">Bảo hành</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 baohanhdevice">
+                            <label for="recipient-name" class="col-form-label"><b class="thuhoiDevice">Thiết bị thu hồi </b><b><span style="color:red"> (*) </span>:  </b></label>
+                            <select name="UpdateDeviceWithdraw" id="UpdateDeviceWithdraw" class="form-control" disabled>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b class="ChangeDate">Ngày thu hồi </b><b><span style="color:red"> (*) </span>:</b>  </label>
+                            <div class="form-group  mb-0">
+                                <div class="input-group date dateDraw">
+                                    <input name="DateWithDraw" value="" id="DateWithDraw" class="form-control">
+                                    <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Ngày chứng từ : </b></label>
+                            <div class="form-group  mb-0">
+                                <div class="input-group date dateVou">
+                                    <input name="" value="" id="DateVouchers" class="form-control">
+                                    <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="col-form-label"><b class="resondevicewithdraw">Lý do thu hồi :  </b></label>
+                            <textarea type="text" class="form-control" id="ResonWithDraw" name="Title" rows="3" maxlength="250"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 d-flex mt-2">
+                        <div class="col-md-offset-2 mr-1">
+                            <input type="button" name="btnUpdateDevice" value="Cập nhật" id="btnUpdateDevice" class="btn btn-primary">
+                        </div>
+                        <div class="col-md-offset-2">
+                            <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseViewDetail" value="Đóng" id="btnCloseViewDetail" class="btn btn-danger">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/Device.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

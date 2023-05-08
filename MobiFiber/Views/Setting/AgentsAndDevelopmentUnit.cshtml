@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý đại lý và đơn vị phát triển";
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/AgentsAndDevelopmentUnit.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Quản lý thông tin đại lý và đơn vị phát triển</h4>
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <div class="">
+                <button class="btn btn-primary" id="btnOpenModalAgents" style="margin-left:2px" data-toggle="modal" data-target="#CreateAgents"><i class="fa fa-plus"></i> Thêm đại lý</button>
+            </div>
+            <div>
+                <table id="tblAgents" class="table-hover table-striped"></table>
+            </div>
+        </div>
+        <div class="col-md-12 mt-2">
+            <div class="">
+                <button class="btn btn-primary" id="btnOpenModalDevelopmentUnit" style="margin-left:2px" data-toggle="modal" data-target="#CreateDevelopmentUnit"><i class="fa fa-plus"></i> Thêm đơn vị phát triển</button>
+            </div>
+            <div>
+                <table id="tblDevelopmentUnit" class="table-hover table-striped"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CreateAgents" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormAgents" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabelAgents">Thêm đại lý</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="AgentsId" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">
+                    Vui lòng nhập các trường bắt buộc (*)
+                </h5>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên đại lý<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="AgentsName" name="AgentsName" maxlength="245">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Mã đại lý<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="AgentsCode" name="AgentsCode" maxlength="50">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Địa chỉ : </label>
+                        <input type="text" class="form-control" id="AgentsAddr" name="AgentsAddr" maxlength="500">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Mã số thuế : </label>
+                        <input type="text" class="form-control" id="AgentsTaxCode" name="AgentsTaxCode" maxlength="50">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">SĐT : </label>
+                        <input type="text" class="form-control" id="AgentsPhone" name="AgentsPhone" maxlength="20">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-12">
+                        <label for="recipient-name" class="col-form-label">Mô tả :</label>
+                        <textarea rows="3" id="DescriptionAgents" name="DescriptionAgents"></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 d-flex mt-2">
+                    <div class="col-md-offset-2 mr-1">
+                        <button name="btnAddAgents" id="btnAddAgents" class="btn btn-primary">Lưu</button>
+                    </div>
+                    <div class="col-md-offset-2">
+                        <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseAgents" value="Đóng" id="btnCloseAgents" class="btn btn-danger">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CreateDevelopmentUnit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormDevelopmentUnit" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm đơn vị phát triển</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="DevelopmentUnitId" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">
+                    Vui lòng nhập các trường bắt buộc (*)
+                </h5>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên đơn vị phát triển<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="DevelopmentUnitName" name="DevelopmentUnitName" maxlength="245">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Mã đơn vị phát triển<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="DevelopmentUnitCode" name="DevelopmentUnitCode" maxlength="50">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Địa chỉ : </label>
+                        <input type="text" class="form-control" id="DevelopmentUnitAddr" name="DevelopmentUnitAddr" maxlength="500">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Mã số thuế : </label>
+                        <input type="text" class="form-control" id="DevelopmentUnitTaxCode" name="DevelopmentUnitTaxCode" maxlength="50">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">SĐT : </label>
+                        <input type="text" class="form-control" id="DevelopmentUnitPhone" name="DevelopmentUnitPhone" maxlength="20">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-12">
+                        <label for="recipient-name" class="col-form-label">Mô tả :</label>
+                        <textarea rows="3" id="DescriptionDevelopmentUnit" name="DescriptionDevelopmentUnit"></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 d-flex mt-2">
+                    <div class="col-md-offset-2 mr-1">
+                        <button name="btnAddDevelopmentUnit" id="btnAddDevelopmentUnit" class="btn btn-primary">Lưu</button>
+                    </div>
+                    <div class="col-md-offset-2">
+                        <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseDevelopmentUnit" value="Đóng" id="btnCloseDevelopmentUnit" class="btn btn-danger">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/AgentsAndDevelopmentUnit.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

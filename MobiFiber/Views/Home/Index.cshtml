@@ -1,0 +1,174 @@
+﻿@{ Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+    string str_class_stats = "col-xl-4 col-lg-6 col-12";
+    string str_class_stats_column_2 = "col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-12 region-stats-chart";
+
+}
+
+@section css{
+    <link href="~/app-assets/fonts/simple-line-icons/style.min.css" rel="stylesheet" />
+    <style>
+
+        .morris-hover {
+            position: absolute;
+            z-index: 1000
+        }
+
+            .morris-hover.morris-default-style {
+                border-radius: 10px;
+                padding: 6px;
+                color: #666;
+                background: rgba(255,255,255,0.8);
+                border: solid 2px rgba(230,230,230,0.8);
+                font-family: sans-serif;
+                font-size: 12px;
+                text-align: center
+            }
+
+                .morris-hover.morris-default-style .morris-hover-row-label {
+                    font-weight: bold;
+                    margin: 0.25em 0
+                }
+
+                .morris-hover.morris-default-style .morris-hover-point {
+                    white-space: nowrap;
+                    margin: 0.1em 0
+                }
+
+        svg tspan {
+            font-family: "Arial" !important;
+            fill: 12px !important;
+        }
+
+        #package_pie_donut, #package_pie_donut, #contract_pie_donut {
+            width: 80%
+        }
+    </style>
+}
+<!--stats-->
+<div class="row" id="div_stats">
+    <div class="@str_class_stats">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="media-body text-left w-100">
+                            <h3 class="success" id="h3_Device">0</h3>
+                            <span id="span_Device">Thiết bị</span>
+                        </div>
+                        <div class="media-right media-middle">
+                            <i class="icon-layers success font-large-2 float-right"></i>
+                        </div>
+                    </div>
+                    @*<div class="progress progress-sm mt-1 mb-0">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="@str_class_stats">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="media-body text-left w-100">
+                            <h3 class="danger" id="h3_package">0</h3>
+                            <span id="span_package">Gói cước</span>
+                        </div>
+                        <div class="media-right media-middle">
+                            <i class="icon-social-dropbox danger font-large-2 float-right"></i>
+                        </div>
+                    </div>
+                    @*<div class="progress progress-sm mt-1 mb-0">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 40%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="@str_class_stats">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="media-body text-left w-100">
+                            <h3 class="primary" id="h3_contract">0</h3>
+                            <span id="span_contract">Hợp đồng</span>
+                        </div>
+                        <div class="media-right media-middle">
+                            <i class="icon-user-follow primary font-large-2 float-right"></i>
+                        </div>
+                    </div>
+                    @*<div class="progress progress-sm mt-1 mb-0">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--/stats-->
+<!--Chart-->
+<div class="row match-height">
+
+    <!--Device-->
+    <div class="@str_class_stats_column_2">
+        <div class="card statistic-card">
+            <div class="card-content">
+                <div class="top-row statistics-card-title border-bottom-blue-grey border-bottom-lighten-5">
+                    <div class="py-1 pl-2 primary">
+                        <span class="mb-1">Thống kê thiết bị</span>
+                    </div>
+                </div>
+                <div class="statistics-chart d-flex justify-content-center align-self-center">
+                    <div id="device_pie_donut" style="width: 80%"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Device-->
+    <!--Package-->
+    <div class="@str_class_stats_column_2">
+        <div class="card statistic-card">
+            <div class="card-content">
+                <div class="top-row statistics-card-title border-bottom-blue-grey border-bottom-lighten-5">
+                    <div class="py-1 pl-2 primary">
+                        <span class="mb-1">Thông kê gói cước</span>
+                    </div>
+                </div>
+                <div class="statistics-chart d-flex justify-content-center align-self-center">
+                    <div id="package_pie_donut"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Package-->
+    <!--Contract-->
+    <div class="@str_class_stats_column_2">
+        <div class="card statistic-card">
+            <div class="card-content">
+                <div class="top-row statistics-card-title border-bottom-blue-grey border-bottom-lighten-5">
+                    <div class="py-1 pl-2 primary">
+                        <span class="mb-1">Thống kê hợp đồng</span>
+                    </div>
+                </div>
+                <div class="statistics-chart d-flex justify-content-center align-self-center">
+                    <div id="contract_pie_donut"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Contract-->
+
+</div>
+
+
+@section scripts{
+    <script src="~/app-assets/vendors/charts/raphael-min.js"></script><!--Thư viện vector-->
+    <script src="~/app-assets/vendors/charts/morris.min.js"></script>
+    <script src="~/js/Dashboard.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+}
+

@@ -1,0 +1,33 @@
+﻿body {
+}
+
+
+.btnCssform {
+    margin-bottom:10px;
+}
+
+.float-right.search {
+    margin-top: 0px !important;
+}
+/*.datepicker-days {
+    display: none !important;
+}
+
+.datepicker-months {
+    display: block !important;
+}*/
+.ui-datepicker-calendar {
+    display: none;
+}
+@media screen and (max-width: 475px) {
+    .bootstrap-table {
+        margin-top: 130px;
+    }
+    .btnCssform {
+        display: block !important;
+        padding-right: 28px !important;
+    }
+    .col-md-3{
+        padding-bottom:5px !important;
+    }
+}

@@ -1,0 +1,54 @@
+INFO  08:18:22 HomeController - Index - Go to Home/Index
+INFO  09:32:08 HomeController - Index - Go to Home/Index
+INFO  09:33:49 An error occurred while updating the entries. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): String or binary data would be truncated.
+The statement has been terminated.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+ClientConnectionId:6a042ce6-cb8b-4a78-a1e4-cd0723dc4ad8
+Error Number:8152,State:30,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(DbContext _, Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()
+   at MobiFiber.DAO.History_DAO.Save(MobifiberHistory obj) in D:\DoAnTotNghiep\Code\Mobifiber\Mobifiber\TemplateNetCore\DAO\History_DAO.cs:line 145
+INFO  09:36:03 HomeController - Index - Go to Home/Index
+INFO  09:45:27 HomeController - Index - Go to Home/Index
+INFO  09:45:41 HomeController - Index - Go to Home/Index
+INFO  09:45:54 HomeController - Index - Go to Home/Index
+INFO  09:45:55 HomeController - Index - Go to Home/Index
+INFO  09:54:04 HomeController - Index - Go to Home/Index
+INFO  10:04:42 HomeController - Index - Go to Home/Index
+INFO  01:09:25 HomeController - Index - Go to Home/Index
+INFO  01:31:36 HomeController - Index - Go to Home/Index
+INFO  01:33:09 HomeController - Index - Go to Home/Index
+INFO  01:39:04 HomeController - Index - Go to Home/Index
+INFO  01:39:05 HomeController - Index - Go to Home/Index
+INFO  01:55:20 HomeController - Index - Go to Home/Index
+INFO  03:21:54 HomeController - Index - Go to Home/Index
+INFO  03:22:06 HomeController - Index - Go to Home/Index
+INFO  03:24:20 HomeController - Index - Go to Home/Index
+INFO  03:24:34 HomeController - Index - Go to Home/Index
+INFO  03:26:08 HomeController - Index - Go to Home/Index
+INFO  03:26:28 HomeController - Index - Go to Home/Index
+INFO  03:26:46 HomeController - Index - Go to Home/Index
+INFO  03:28:47 HomeController - Index - Go to Home/Index
+INFO  03:39:22 HomeController - Index - Go to Home/Index
+INFO  03:42:44 HomeController - Index - Go to Home/Index

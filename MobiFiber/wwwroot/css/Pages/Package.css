@@ -1,0 +1,29 @@
+﻿body {
+}
+
+#FormPackage{
+    max-width:60%;
+}
+#FormViewDetailPackage {
+    max-width: 70%;
+}
+
+.btnCssPackage {
+    position: absolute;
+    right: 210px;
+}
+#tabsPackage{
+    background: #f3f5f8;
+}
+
+.float-right.search {
+    margin-top: 0px !important;
+}
+@media screen and (max-width: 768px) {
+    #FormPackage {
+        max-width: 100%;
+    }
+    #FormViewDetailPackage {
+        max-width: 100%;
+    }
+}

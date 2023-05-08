@@ -1,0 +1,312 @@
+﻿@using MobiFiber.DAO;
+@using MobiFiber.Models;
+@using Micro.Web
+@{
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý khách hàng";
+    Dictionary<int, bool> dicRole = GetUserRole.GetRoleAddByUser();
+    List<MobifiberPackage> lstpackage = (List<MobifiberPackage>)ViewData["lstpackage"];
+    List<MobifiberDevice> lstdevice = (List<MobifiberDevice>)ViewData["lstdevice"];
+    List<MobifiberAgent> lstAgent = (List<MobifiberAgent>)ViewData["lstAgent"];
+    List<MobifiberDevelopmentUnit> lstDevelopmentUnit = (List<MobifiberDevelopmentUnit>)ViewData["lstDevelopmentUnit"];
+}
+
+@section css{
+    <link href="~/css/Pages/Contract.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Quản lý khách hàng</h4>
+    </div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <input placeholder="Tìm theo tên, mã, CCCD, địa chỉ, serial, hợp đồng" class="form-control" id="txtsearch" />
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="filterpackage">
+                    <option value="-1">Tất cả gói cước </option>
+                    @if (lstpackage != null && lstpackage.Count > 0)
+                    {
+                        foreach (var item in lstpackage)
+                        {
+                            <option value="@item.PackageId">@item.PackageName - @item.Price</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="filterstatus">
+                    <option value="-1">Tất cả khách hàng</option>
+                    <option value="0">Đang sử dụng</option>
+                    <option value="1">Hết hạn sử dụng, chờ gia hạn</option>
+                    <option value="2">Đã thanh lý hợp đồng</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" id="btnsearch"><i class="fa fa-search"></i> Tìm kiếm</button>
+                <a href="@(dicRole[(int)MobiFiber.Code.ActionModule.ContractManager] == true ? "/Contract/CreateInit" : "#")" class="@(dicRole[(int)MobiFiber.Code.ActionModule.ContractManager] == true ? "btn btn-primary" : "btn btn-primary disabledbtnadd")"><i class="fa fa-plus"></i> Tạo mới</a>
+                <button class="btn btn-primary" id="exportcontract"><i class="fa fa-download"> </i> Export</button>
+            </div>
+        </div>
+        <div>
+            <table id="tblContract" class="table-hover table-striped"></table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CreateContract" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormContract" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cập nhật thông tin khách hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="Contractid" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">
+                    Vui lòng nhập các trường bắt buộc (*)
+                </h5>
+                <input id="ContractId" value="0" hidden />
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên khách hàng<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="CustomerName" name="CustomerName" maxlength="250">
+                    </div>
+                    <div class="col-md-3 pr-2">
+                        <label for="recipient-name" class="col-form-label">Mã khách hàng (VM) <span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="CustomerID" name="CustomerID" maxlength="20">
+                        @*<button class="btn btn-primary" id="btnforwardcccd"><i class="fa fa-forward"></i></button>*@
+                    </div>
+                    <div class="col-md-3">
+                        <label for="recipient-name" class="col-form-label">CCCD/CMND : </label>
+                        <input type="text" class="form-control" id="IdentityCard" name="IdentityCard" maxlength="12">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Địa chỉ : </label>
+                        <input type="text" class="form-control" id="AdressCustomer" name="AdressCustomer" maxlength="300">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Số điện thoại : </label>
+                        <input type="text" class="form-control" id="Phone" name="Phone" maxlength="50" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Số hợp đồng<span style="color:red"> (*) </span>: </label>
+                        <input type="text" class="form-control" id="ContractNumber" name="ContractNumber" maxlength="100">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Ngày ký hợp đồng <span style="color:red"> (*) </span>: </label>
+                        <div class="form-group  mb-0">
+                            <div class="input-group date DateSign">
+                                <input name="SignDate" value="" id="SignDate" class="form-control">
+                                <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <input hidden id="CurrentPackage" value="0" />
+                        <label for="recipient-name" class="col-form-label">Gói cước đăng ký <span style="color:red"> (*) </span>: </label>
+                        <select name="PackageId" id="PackageId" class="form-control">
+                        </select>
+                    </div>
+                    <div class="col-md-6 cssassigndate">
+                        <label for="recipient-name" class="col-form-label">Ngày đăng ký gói cước<span style="color:red"> (*) </span>: </label>
+                        <div class="form-group mb-0">
+                            <div class="input-group date DateRegister">
+                                <input name="RegisterDate" value="" id="RegisterDate" class="form-control">
+                                <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 csschangedate">
+                        <label for="recipient-name" class="col-form-label">Ngày chuyển đổi gói cước <span style="color:red"> (*) </span>: </label>
+                        <div class="form-group  mb-0">
+                            <div class="input-group date DateChange">
+                                <input name="DateChangePackage" value="" id="DateChangePackage" class="form-control">
+                                <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <input hidden id="CurrentDevice" value="0" />
+                        <label for="recipient-name" class="col-form-label">Thiết bị : </label>
+                        <select name="DeviceId" id="DeviceId" class="form-control">
+                        </select>
+                    </div>
+                    <div class="col-md-6 cssChangeDevice">
+                        <label for="recipient-name" class="col-form-label">Ngày đổi thiết bị <span style="color:red"> (*) </span>: </label>
+                        <div class="form-group  mb-0">
+                            <div class="input-group date ChangeDevice">
+                                <input name="DateChangeDevice" value="" id="DateChangeDevice" class="form-control">
+                                <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên đại lý (AM) : </label>
+                        <select name="Agentcode" id="Agentcode" class="form-control">
+                            <option value="0">--- Chọn đại lý ---</option>
+                            @if (lstAgent != null && lstAgent.Count > 0)
+                            {
+                                foreach (var item in lstAgent)
+                                {
+                                    <option value="@item.AmId">@item.AgentsName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Số hóa đơn : </label>
+                        <input type="text" class="form-control" id="BillNumber" name="BillNumber" maxlength="50">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Ngày hóa đơn : </label>
+                        <div class="form-group mb-0">
+                            <div class="input-group date DateBill">
+                                <input name="BillDate" value="" id="BillDate" class="form-control">
+                                <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Số tiền trên hóa đơn <span style="color:red"> (*) </span>: </label>
+                        <input type="number" min="0" class="form-control" id="BillPrice" name="BillPrice" maxlength="16" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Tên đơn vị phát triển : </label>
+                        <select name="DeveloperName" id="DeveloperName" class="form-control">
+                            <option value="0">--- Chọn đơn vị phát triển ---</option>
+                            @if (lstDevelopmentUnit != null && lstDevelopmentUnit.Count > 0)
+                            {
+                                foreach (var item in lstDevelopmentUnit)
+                                {
+                                    <option value="@item.DevelopId">@item.DevelopName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Đối tác hạ tầng : </label>
+                        <input type="text" class="form-control" id="InfrastructurePartners" name="InfrastructurePartners" maxlength="250">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Loại hình hợp tác : </label>
+                        <input type="text" class="form-control" id="TypeOfCooperation" name="TypeOfCooperation" maxlength="250">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label for="recipient-name" class="col-form-label">Trạng thái </label>
+                        <select class="form-control" id="Status" name="Status">
+                            <option value="0">Đang sử dụng</option>
+                            <option value="1">Hết hạn sử dụng, chờ gia hạn</option>
+                            <option value="2">Đã thanh lý hợp đồng</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 cssliquidationdate">
+                        <label for="recipient-name" class="col-form-label">Ngày thanh lý hợp đồng <span style="color:red"> (*) </span>: </label>
+                        <input class="form-control" id="LiquidationDate" name="LiquidationDate" maxlength="250">
+                    </div>
+                </div>
+                <div class="form-group col-md-12 d-flex mt-2">
+                    <div class="col-md-offset-2 mr-1">
+                        <button name="btnAddContract" id="btnAddContract" class="btn btn-primary">Cập nhật</button>
+                        @*<input type="button" name="btnAddContract" value="Sửa" id="btnAddContract" class="btn btn-primary">*@
+                    </div>
+                    <div class="col-md-offset-2 mr-1">
+                        <input type="button" data-dismiss="modal" aria-label="Close" name="btnClose" value="Đóng" id="btnClose" class="btn btn-danger">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ViewDetailContract" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormViewDetailContract" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chi tiết hợp đồng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="Deviceid" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Tên khách hàng : </b></label>
+                            <span id="CustomerNameDetail"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Mã khách hàng : </b></label>
+                            <span id="CustomerNumberDetail"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Số hợp đồng : </b></label>
+                            <span id="ContractNumberDetail"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Ngày ký hợp đồng : </b></label>
+                            <span id="RegisterContractDetail"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="col-form-label"><b>Các thiết bị đã sử dụng : </b></label>
+                            <table id="tabledevicecontract" class="table-hover mb0 table-borderless"></table>
+
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="col-form-label"><b>Các gói cước đã sử dụng : </b></label>
+                            <table id="tablepackagecontract" class="table-hover mb0 table-borderless"></table>
+
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 d-flex mt-2">
+                        <div class="col-md-offset-2">
+                            <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseViewDetail" value="Đóng" id="btnCloseViewDetail" class="btn btn-danger">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/js/Contract.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

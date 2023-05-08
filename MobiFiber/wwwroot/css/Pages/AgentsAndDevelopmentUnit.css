@@ -1,0 +1,28 @@
+﻿
+#FormAgents, #FormDevelopmentUnit {
+    max-width: 60%;
+}
+
+.float-right.search {
+    margin-top: 0px !important;
+}
+
+#DescriptionAgents, #DescriptionDevelopmentUnit {
+    width: 100%;
+}
+
+#btnOpenModalDevelopmentUnit {
+  float:right;
+  margin-bottom:10px;
+}
+
+#btnOpenModalAgents {
+    float: right;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    #FormAgents, #FormDevelopmentUnit {
+        max-width: 100%;
+    }
+}

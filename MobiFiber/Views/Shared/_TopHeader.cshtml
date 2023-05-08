@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Micro.Web.Code;
+@{
+    var sessUser = SessionSystem.userSession;
+    string username = string.Empty;
+    if (sessUser != null)
+    {
+        username = sessUser.UserName.Split('@')[0];
+    }
+}
+<!-- BEGIN: Header-->
+<nav class="header-navbar navbar-expand-md navbar navbar-with-menu fixed-top navbar-light navbar-border">
+    <div class="navbar-wrapper">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row">
+                <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="feather icon-menu font-large-1"></i></a></li>
+                <li class="nav-item">
+                    <a class="navbar-brand" href="/Home">
+                        <img class="brand-logo d-none" alt="stack admin logo" src="~/app-assets/images/logo/stack-logo.png">
+                        <h2 class="brand-text">
+                            @*<img style="width:100%" src="~/Assets/images/logo-mobi.png" />*@
+                            @*<img style="width:100%" src="~/Assets/images/logo-mobi-sm.png" />*@
+                            <img id="LogoImages" src="~/Assets/images/MBF_QuyChuanLogo.png" />
+                        </h2>
+                    </a>
+                </li>
+                <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="fa fa-ellipsis-v"></i></a></li>
+            </ul>
+        </div>
+        <div class="navbar-container content">
+            <div class="collapse navbar-collapse" id="navbar-mobile">
+                <ul class="nav navbar-nav mr-auto float-left">
+                    <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="feather icon-menu"></i></a></li>
+                </ul>
+                <ul class="nav navbar-nav float-right">
+                    <li class="dropdown dropdown-user nav-item">
+                        <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                            <div class="avatar avatar-online"></div><span class="user-name" style="display:contents !important">@username</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/Account/Profile"><i class="feather icon-user"></i>Thông tin cá nhân</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" onclick="ClearSession()"><i class="feather icon-power"></i>Đăng xuất</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- END: Header-->

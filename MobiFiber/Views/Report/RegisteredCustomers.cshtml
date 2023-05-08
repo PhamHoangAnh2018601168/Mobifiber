@@ -1,0 +1,70 @@
+﻿@using Micro.Web
+@{
+
+    Dictionary<int, bool> dicRole = GetUserRole.GetRoleExportByUser();
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Báo cáo khách hàng đăng ký dịch vụ Mobifiber";
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/Report.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
+<style>
+    tspan {
+        font-family: Helvetica,"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        font-size: 14px !important;
+        font-weight: normal;
+        color: red;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Báo cáo khách hàng đăng ký dịch vụ Mobifiber</h4>
+    </div>
+    <div class="card-body">
+        <div class="btnCssform col-md-12 d-flex pl-0">
+            <div class="col-md-3 pl-0">
+                <div class="input-group date startdate">
+                    <input name="startDateFilter" value="" id="startDateFilter" class="form-control">
+                    <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                </div>
+            </div>
+            @*<div class="col-md-3 pl-0">
+                <div class="input-group date enddate">
+                    <input name="endDateFilter" value="" id="endDateFilter" class="form-control">
+                    <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                </div>
+            </div>*@
+            <div class="col-md-3 pl-0">
+                <div>
+                    <input name="TextSearch" placeholder="Tìm kiếm" id="TextSearch" class="form-control">
+                </div>
+            </div>
+            <div class="">
+                <button class="btn btn-primary pl-1" id="btnRegistredCustormersFilter" title="Lọc"> <i class="fa fa-filter"></i></button>
+                <button @(dicRole[(int)MobiFiber.Code.ActionModule.ReprotRegisteredCustomers] == true ? "" : "disabled") class="btn btn-primary" id="btnRegistredCustormersExport" title="Xuất file Excel"> <i class="fa fa-file-excel-o"></i></button>
+            </div>
+        </div>
+        <div>
+            <table id="tblRegisteredCustomers" class="table-hover table-striped"></table>
+        </div>
+        <div class="col-md-12">
+            <div id="charMonth"></div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/Report.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/app-assets/js/HightChart/highcharts.js"></script>
+}

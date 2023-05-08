@@ -1,0 +1,60 @@
+@using Micro.Web
+@{
+    Dictionary<int, bool> dicRole = GetUserRole.GetRoleByUser();
+}
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="main-menu-content">
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li class=" nav-item" id="HomeActive" data-disable="@(dicRole[(int)MobiFiber.Code.ActionModule.Home] == true ? "" : "DisableMenu")">
+                <a  class="@(dicRole[(int)MobiFiber.Code.ActionModule.Home] == true ? "" : "DisableMenuhome")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.Home] == true ? "/Home" : "#")" title="Home"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Home">Dashboard</span></a>
+            </li>
+            <li class=" nav-item" id="DeviceActive" data-disable="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceManager] == true ? "" : "DisableMenu")">
+                <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceManager] == true ? "" : "DisableMenuhome")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceManager] == true ? "/Device" : "#")"title="Device Manager"><i class="fa fa-cog"></i><span class="menu-title" data-i18n="Home" id="QLDevice">QL Thiết bị</span></a>
+            </li>
+            <li class=" nav-item" id="PackageActive" data-disable="@(dicRole[(int)MobiFiber.Code.ActionModule.PackageManager] == true ? "" : "DisableMenu")">
+                <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.PackageManager] == true ? "" : "DisableMenuhome")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.PackageManager] == true ? "/Package" : "#")" title="Package Manager"><i class="feather icon-package"></i><span class="menu-title" data-i18n="Home" id="QLPackage">QL Gói cước</span></a>
+            </li>
+            <li class=" nav-item" id="ContractActive" data-disable="@(dicRole[(int)MobiFiber.Code.ActionModule.ContractManager] == true ? "" : "DisableMenu")">
+                <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.ContractManager] == true ? "" : "DisableMenuhome")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.ContractManager] == true ? "/Contract" : "#")" title="Contract Manager"><i class="fa fa-file-text-o"></i><span class="menu-title" data-i18n="Home" id="QLCustomer">QL Khách Hàng</span></a>
+            </li>
+            <li class=" nav-item" id="ReportActive" >
+                <a href="#"><i class="fa fa-list-alt"></i><span class="menu-title" data-i18n="Home" id="QLReport">Báo cáo</span></a>
+                <ul class="menu-content">
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.ReprotRegisteredCustomers] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.ReprotRegisteredCustomers] == true ? "/Report/RegisteredCustomers" : "#")" >Khách hàng đăng ký</a>
+                    </li>
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceCostAllocation] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceCostAllocation] == true ? "/Report/DeviceCostAllocation" : "#")"  data-i18n="Fitness">Phân bổ thiết bị</a>
+                    </li>
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceStatus] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.DeviceStatus] == true ? "/Report/DeviceStatus" : "#")"  data-i18n="Analytics">Tình trạng thiết bị</a>
+                    </li>
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.ServiceRevenueAllocation] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.ServiceRevenueAllocation] == true ? "/Report/ServiceRevenueAllocation" : "#")" >Doanh thu</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class=" nav-item" id="SettingActive">
+                <a  href="#"><i class="fa fa-wrench"></i><span class="menu-title" data-i18n="Home" id="QLSetting">Cài đặt</span></a>
+                <ul class="menu-content">
+                    @*<li>
+            <a class="menu-item" href="/Setting/GroupManager" data-i18n="Fitness">Quản lý nhóm</a>
+        </li>*@
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.RoleGroup] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.RoleGroup] == true ? "/Setting/RoleGroup" : "#")" data-i18n="Analytics">Phân quyền</a>
+                    </li>
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.UserManager] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.UserManager] == true ? "/Setting/UserManager" : "#")">Quản lý User</a>
+                    </li>
+                    <li>
+                        <a class="@(dicRole[(int)MobiFiber.Code.ActionModule.UserHistory] == true ? "menu-item" : "DisableMenuhome menu-item")" href="@(dicRole[(int)MobiFiber.Code.ActionModule.UserHistory] == true ? "/Setting/UserHistory" : "#")">Lịch sử User</a>
+                    </li>
+                    <li>
+                        <a class="menu-item" href="/Setting/AgentsAndDevelopmentUnit">QL Đại lý</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

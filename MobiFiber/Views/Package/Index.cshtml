@@ -1,0 +1,226 @@
+﻿@using Micro.Web
+@{
+
+    Dictionary<int, bool> dicRole = GetUserRole.GetRoleAddByUser();
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý gói cước";
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/css/Pages/Package.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title ">Quản lý gói cước</h4>
+    </div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <input class="form-control" placeholder="Tìm kiếm" id="txtsearch" />
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="filterstatus">
+                    <option value="-1">Tất cả gói cước</option>
+                    <option value="0">Còn hiệu lực</option>
+                    <option value="1">Hết hiệu lực</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" id="btnsearch"><i class="fa fa-search"></i> Tìm kiếm</button>
+                <button class="btn btn-primary" id="btnOpenModalPackage" style="margin-left:2px" data-toggle="modal" data-target="#CreatePackage" @(dicRole[(int)MobiFiber.Code.ActionModule.PackageManager] == true ? "" : "disabled")><i class="fa fa-plus"></i> Tạo mới</button>
+            </div>
+        </div>
+        <div class="btnCssPackage">
+
+        </div>
+        <div>
+            <table id="tblPackage" class="table-hover table-striped "></table>
+        </div>
+    </div>
+</div>
+<div class="" id="loadingpage"></div>
+<div class="modal fade" id="CreatePackage" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormPackage" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo mới gói cước</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="Packageid" value="0" hidden />
+            </div>
+            <ul class="nav nav-tabs" id="tabsPackage" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="btn-step1" data-toggle="tab" aria-controls="step_1" href="#step_1" role="tab" aria-selected="false">
+                        Thêm mới
+                        <span class="badge badge-success badge-pill badge-round float-right"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="btn-step2" data-toggle="tab" aria-controls="step_2" href="#step_2" role="tab" aria-selected="false">
+                        Thêm mới bằng File
+                        <span class="badge badge-warning badge-pill badge-round totalComment float-right"></span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="step_1" role="tabpanel" aria-labelledby="step_1">
+                    <div class="modal-body">
+                        <h5 class="text-danger">
+                            Vui lòng nhập các trường bắt buộc (*)
+                        </h5>
+                        <div class="input-group">
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Tên gói cước<span style="color:red"> (*) </span>: </label>
+                                <input type="text" class="form-control" id="AddPackageName" name="Title" maxlength="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Mã gói cước <span style="color:red">(*) </span>: </label>
+                                <input type="text" class="form-control" id="PackageNumber" name="PackageNumber" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Số công văn quyết định <span style="color:red">(*) </span>: </label>
+                                <input type="text" class="form-control" id="Decision" name="Decision" maxlength="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Thời gian sử dụng <span style="color:red"> ( Đơn vị tháng *) </span>: </label>
+                                <input class="form-control" id="TimeUsed" name="TimeUsed" maxlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onblur="common.RemoveSpecialChar(this)">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Thời gian khuyến mãi <span style="color:red"> ( Đơn vị tháng *) </span>: </label>
+                                <input class="form-control" id="PromotionTime" name="PromotionTime" maxlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onblur="common.RemoveSpecialChar(this)">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Giá gói cước <span style="color:red"> ( Chưa bao gồm VAT *) </span>: </label>
+                                <input class="form-control" id="PricePackage" name="PricePackage" maxlength="16" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onblur="common.RemoveSpecialChar(this)">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Thuế VAT<span style="color:red"> ( Đơn vị phần trăm % *) </span>: </label>
+                                <input class="form-control" id="PackageVAT" name="PackageVAT" maxlength="5" type="number">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Giá gói cước<span style="color:red"> ( Bao gồm VAT *) </span>: </label>
+                                <input type="number" min="0" class="form-control" id="PricePackageVAT" name="PricePackageVAT" maxlength="16" onkeypress='return event.charCode >= 48 && event.charCode <= 57' readonly>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="col-md-6">
+                                <label for="recipient-name" class="col-form-label">Trạng thái <span style="color:red"> (*) </span>: </label>
+                                <select name="PackageStatus" id="PackageStatus" class="form-control">
+                                    <option value="0">Còn hiệu lực</option>
+                                    <option value="1">Hết hiệu lực</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 d-flex mt-2">
+                            <div class="col-md-offset-2 mr-1">
+                                <button name="btnAddPackage" id="btnAddPackage" class="btn btn-primary">Tạo</button>
+                            </div>
+                            <div class="col-md-offset-2">
+                                <input type="button" data-dismiss="modal" aria-label="Close" name="btnClosePackage" value="Đóng" id="btnClosePackage" class="btn btn-danger">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="step_2" role="tabpanel" aria-labelledby="step_2">
+                    <div class="modal-body">
+                        <div id="divUpload">
+
+                            <div class="mb-1 d-flex">
+                                <div class="col-md-10">
+                                    <input type="file" id="fileupload" name="files" class="form-control mb-1" />
+                                    <span class="text-danger"> ( Vui lòng không sửa dụng công thức trong file Exel )</span>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="button" onclick="window.location.href='/Package/DownloadTemplateDevice'" name="DownloadTemplate" value="Tải file mẫu" id="btnDownloadTemplate" class="btn btn-primary " />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button name="Upload" id="btnupload" class="btn btn-primary">Tải lên</button>
+                                <input type="button" data-dismiss="modal" aria-label="Close" value="Đóng" class="btn btn-danger">
+                            </div>
+                        </div>
+                        <div id="divPreview" style="display:none">
+                            <div class="tabstablecss">
+                                <table id="tblPackageValid" class="table-hover table-striped"></table>
+                            </div>
+                            <button name="SaveData" id="btnSaveData" class="btn btn-primary my-1">Lưu</button>
+                            <div class="tabstablecss">
+                                <table id="tblPackageInValid" class="table-hover table-striped"></table>
+                            </div>
+                            <input type="button" name="DownloadError" value="Download Error" id="btnDownloadError" class="btn btn-primary my-1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ViewDetailPackage" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" id="FormViewDetailPackage" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Lịch sử sử dụng gói cước gói cước</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <input id="Packageid" value="0" hidden />
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Tên gói cước : </b></label>
+                            <span id="PackageNameDetail"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Gía gói cước ( Chưa bao gồm VAT ) : </b></label>
+                            <span id="PriceDetail"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Gía gói cước ( Bao gồm VAT ) : </b></label>
+                            <span id="PriceVATDetail"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label"><b>Thời gian sử dụng : </b></label>
+                            <span id="TmeUsedDetail"></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <label for="recipient-name" class="col-form-label"><b>Các hợp đồng sử dụng gói cước : </b></label>
+                            <table id="tblPackageDetail" class="table-hover mb0 table-borderless"></table>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 d-flex mt-2">
+                        <div class="col-md-offset-2">
+                            <input type="button" data-dismiss="modal" aria-label="Close" name="btnCloseViewDetail" value="Đóng" id="btnCloseViewDetail" class="btn btn-danger">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/Package.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}

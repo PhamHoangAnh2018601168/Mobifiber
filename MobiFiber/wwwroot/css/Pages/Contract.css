@@ -1,0 +1,47 @@
+﻿
+
+.btnCssContract {
+    position: absolute;
+    right: 210px;
+}
+
+.float-right.search {
+    margin-top: 0px !important;
+}
+
+#FormContract, #FormViewDetailContract {
+    max-width: 80%;
+}
+.disabledbtnadd {
+    color: currentColor !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+    text-decoration: none !important;
+    color:white !important;
+}
+#tabsContract {
+    background: #f3f5f8;
+}
+#FormViewDetailContract {
+    max-width: 80%;
+}
+.cssAgentsCode > .th-inner {
+    width: 150px !important;
+    overflow-wrap: break-word;
+}
+#btnforwardcccd {
+    padding: 11px 6px 11px 8px;
+    position: absolute;
+    top: 40px;
+    right: -12px;
+}
+@media screen and (max-width: 768px) {
+    #FormContract {
+        max-width: 100%;
+    }
+
+    #FormViewDetailContract, #FormViewDetailContract {
+        max-width: 100%;
+    }
+}
+

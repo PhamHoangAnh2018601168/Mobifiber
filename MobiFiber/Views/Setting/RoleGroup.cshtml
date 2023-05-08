@@ -1,0 +1,135 @@
+﻿@using MobiFiber.Code;
+@using MobiFiber.Models;
+@model List<Role>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Phân quyền";
+    List<Module> lstModuleGroup = (List<Module>)ViewData["lstModuleGroup"];
+    List<RoleGroup> lstRoleGroup = (List<RoleGroup>)ViewData["lstRoleGroup"];
+    MobifiberConfig RoleConfig = (MobifiberConfig)ViewData["RoleConfig"];
+    string class_title = "";
+    string class_Role = "item_row";
+    int Id = (int)ViewData["IdGroup"];
+    int disable = (int)ViewData["DisableSaler"];
+}
+
+@section css{
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Phân quyền</h4>
+    </div>
+    <div class="card-body">
+        <div class="input-group">
+            <div class="col-md-2">
+                <label for="recipient-name" class="col-form-label"><b>Chọn nhóm quyền : </b></label>
+                
+            </div>
+            <div class="col-md-4">
+                <select name="SelectRoleGroup" id="SelectRoleGroup" class="form-control">
+                    <option value="0">--- Chọn nhóm quyền ---</option>
+
+                    @if (lstRoleGroup != null && lstRoleGroup.Count > 0)
+                    {
+                        foreach (var item in lstRoleGroup)
+                        {
+                            <option value="@item.Id" @(Id == item.Id ? "selected=\"selected\"" : "")>@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="input-group mt-1">
+            <div class="col-md-2 pr-0">
+                <label for="recipient-name" class="col-form-label"><b>Khoá quyền phân kỳ :</b></label>
+            </div>
+            <div class="col-md-3">
+                @*<label for="recipient-name" class="col-form-label"><b class="ChangeDate">Ngày cấu hình </b><b><span style="color:red"> (*) </span>:</b>  </label>*@
+                <div class="form-group  mb-0">
+                    <div class="input-group date LockRoleDate">
+                        <input id="DataConfigRole" value="@RoleConfig.Value" data-status="@RoleConfig.Status" hidden/>
+                        <input name="LockRoleDate" value="" id="LockRoleDate" class="form-control">
+                        <span class="input-group-addon"><img id="" class="icon" src="~/Assets/images/calendar.gif"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input style="width:25px;height:40px" id="DisableSaler" name="DisableSaler" type="checkbox" @(disable == (int)GroupStatus.Limit ? "checked" : "") />
+            </div>
+        </div>
+        <br />
+        <div class="table-responsive">
+            @using (Html.BeginForm("RoleGroup", "Setting", FormMethod.Post, new { id = "FromRoleGroup" }))
+            {
+                <table class="table table-hover table-striped table-fixed">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left" class="@class_title">Tên mô đun   <br />&nbsp;</th>
+                            <th style="text-align: center" class="@class_Role">Thêm mới          <br /> <input type="checkbox" id="chk_All_New" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Sửa         <br /> <input type="checkbox" id="chk_All_Edit" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Xem         <br /><input type="checkbox" id="chk_All_View" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Xoá       <br /><input type="checkbox" id="chk_All_Delete" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Báo cáo       <br /><input type="checkbox" id="chk_All_Report" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Nhập       <br /><input type="checkbox" id="chk_All_Upload" class="flat" /></th>
+                            <th style="text-align: center" class="@class_Role">Xuất       <br /><input type="checkbox" id="chk_All_Export" class="flat" /></th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align:center">
+                        @if (Model.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td align="left" class="@class_title">
+                                        @Html.HiddenFor(c => Model[i].ModuleId)
+                                        @Html.HiddenFor(c => Model[i].Id)
+                                        @Html.HiddenFor(c => Model[i].GroupId)
+                                        @foreach (var item in lstModuleGroup)
+                                        {
+                                            <a href="javascript:void(0);" id="data-@Model[i].ModuleId" data-id="@Model[i].ModuleId" class="link_edit_controller" data-name="@Model[i].ModuleId">
+                                                @if (item.Id == @Model[i].ModuleId)
+                                                {
+                                                    @item.NameModuleRole
+                                                }
+                                            </a>
+                                        }
+                                    </td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Add, new { @class = "flat", data_id = "chk_Add_New_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Add })</td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Edit, new { @class = "flat", data_id = "chk_Edit_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Edit })</td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].View, new { @class = "flat", data_id = "chk_View_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].View }) </td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Delete, new { @class = "flat", data_id = "chk_Delete_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Delete }) </td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Report, new { @class = "flat", data_id = "chk_Report_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Report }) </td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Import, new { @class = "flat", data_id = "chk_Upload_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Import }) </td>
+                                    <td class="@class_Role"> @Html.CheckBoxFor(c => Model[i].Export, new { @class = "flat", data_id = "chk_Export_Item", data_extendId = Model[i].ModuleId, data_value = Model[i].Export }) </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6"> @ViewBag.Message</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                @if (Model.Count > 0)
+                {
+                    <button type="submit" class="btn btn-success">Lưu Thay Đổi</button>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/js/Role.js"></script>
+    <script src="~/app-assets/vendors/toastr/toastr.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+}
